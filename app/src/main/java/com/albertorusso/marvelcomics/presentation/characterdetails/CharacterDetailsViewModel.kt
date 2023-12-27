@@ -16,10 +16,10 @@ class CharacterDetailsViewModel @Inject constructor(
 ) : ViewModel() {
     
     private val loadingState: MutableLiveData<LoadingState> = MutableLiveData()
-    private val character = MutableLiveData<MarvelCharacter?>()
+    private val character = MutableLiveData<MarvelCharacter>()
     
     fun state(): LiveData<LoadingState> = loadingState
-    fun character(): LiveData<MarvelCharacter?> = character
+    fun character(): LiveData<MarvelCharacter> = character
     
     fun fetchCharacter(id: Int) {
         viewModelScope.launch {
@@ -27,11 +27,15 @@ class CharacterDetailsViewModel @Inject constructor(
                 loadingState.value = LoadingState.IN_PROGRESS
                 
                 if(id > 0) {
-                    val characterList = getCharacterDetailsUseCase(id)
-                    character.postValue(characterList)
+                    val characterDetails = getCharacterDetailsUseCase(id)
+                    characterDetails?.let {
+                        character.postValue(it)
+                        loadingState.value = LoadingState.LOADED
+                    } ?: run {
+                        loadingState.value = LoadingState.ERROR
+                        return@launch  // Exit the function if characterDetails is null
+                    }
                 }
-                
-                loadingState.value = LoadingState.LOADED
             } catch (e: Exception) {
                 loadingState.value = LoadingState.ERROR
             }

@@ -4,22 +4,12 @@ data class MarvelCharacter(
     val id: Int,
     val name: String,
     val image: String,
-    val comics: List<ComicItem>,
-    val events: List<EventItem>,
-    val series: List<SeriesItem>
+    val comics: List<ImageItem>,
+    val events: List<ImageItem>,
+    val series: List<ImageItem>
 )
 
-data class ComicItem(
-    val name: String,
-    val image: String
-)
-
-data class EventItem(
-    val name: String,
-    val image: String
-)
-
-data class SeriesItem(
+data class ImageItem(
     val name: String,
     val image: String
 )
