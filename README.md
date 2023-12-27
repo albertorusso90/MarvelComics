@@ -2,6 +2,8 @@
 This Android application is developed using the MVVM design pattern and implements clean architecture principles. It utilizes various libraries and frameworks including Dagger-Hilt, Coroutines, Retrofit, Jetpack Compose, and Coil.
 
 ## Getting Started
+You will need to get a public and private key from here https://developer.marvel.com/documentation/getting_started 
+
 To run this application locally, you need to define the following keys in your local.properties file:
 
 ```
