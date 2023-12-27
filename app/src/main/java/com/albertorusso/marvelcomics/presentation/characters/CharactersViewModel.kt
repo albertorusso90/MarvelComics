@@ -21,12 +21,16 @@ class CharactersViewModel @Inject constructor(
     fun state(): LiveData<LoadingState> = loadingState
     fun characters(): LiveData<List<SimpleMarvelCharacter>> = characters
     
-    fun fetchCharacters() {
-        loadingState.value = LoadingState.IN_PROGRESS
+    fun fetchCharacters(name: String) {
         viewModelScope.launch {
             try {
-                val characterList = getCharactersUseCase("Hulk")
-                characters.postValue(characterList)
+                loadingState.value = LoadingState.IN_PROGRESS
+                
+                if(name.isNotEmpty()) {
+                    val characterList = getCharactersUseCase(name)
+                    characters.postValue(characterList)
+                }
+    
                 loadingState.value = LoadingState.LOADED
             } catch (e: Exception) {
                 loadingState.value = LoadingState.ERROR

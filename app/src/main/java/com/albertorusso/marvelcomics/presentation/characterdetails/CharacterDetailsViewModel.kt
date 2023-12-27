@@ -5,9 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.albertorusso.marvelcomics.domain.model.MarvelCharacter
-import com.albertorusso.marvelcomics.domain.model.SimpleMarvelCharacter
 import com.albertorusso.marvelcomics.domain.usecase.GetCharacterDetailsUseCase
-import com.albertorusso.marvelcomics.presentation.characters.CharactersViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,11 +22,15 @@ class CharacterDetailsViewModel @Inject constructor(
     fun character(): LiveData<MarvelCharacter?> = character
     
     fun fetchCharacter(id: Int) {
-        loadingState.value = LoadingState.IN_PROGRESS
         viewModelScope.launch {
             try {
-                val characterList = getCharacterDetailsUseCase(id)
-                character.postValue(characterList)
+                loadingState.value = LoadingState.IN_PROGRESS
+                
+                if(id > 0) {
+                    val characterList = getCharacterDetailsUseCase(id)
+                    character.postValue(characterList)
+                }
+                
                 loadingState.value = LoadingState.LOADED
             } catch (e: Exception) {
                 loadingState.value = LoadingState.ERROR
