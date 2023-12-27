@@ -1,4 +1,4 @@
-package com.albertorusso.marvelcomics.ui.theme
+package com.albertorusso.marvelcomics.presentation.ui.theme
 
 import android.app.Activity
 import android.os.Build
