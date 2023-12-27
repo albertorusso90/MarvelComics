@@ -1,8 +1,20 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
+}
+
+val properties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localPropertiesFile.inputStream().use { input ->
+            load(input)
+        }
+    }
 }
 
 android {
@@ -20,6 +32,16 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+    
+        // Enable buildConfig feature
+        buildFeatures {
+            buildConfig = true
+        }
+    
+        // Access API key from local.properties
+        buildConfigField("String", "MARVEL_API_KEY", properties.getProperty("marvel.api.key") ?: "")
+        buildConfigField("String", "MARVEL_API_HASH", properties.getProperty("marvel.api.hash") ?: "")
+    
     }
     
     buildTypes {
