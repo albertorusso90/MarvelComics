@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">MarvelComics</string>
     <string name="error_loading">Error loading characters</string>
+    <string name="empty_data">Empty data</string>
+    <string name="comics">Comics:</string>
+    <string name="events">Events:</string>
+    <string name="series">Series:</string>
 </resources>

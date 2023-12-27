@@ -7,17 +7,19 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -33,11 +35,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
@@ -55,6 +59,7 @@ class CharactersActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
+        viewModel.fetchCharacters("HULK")
         setContent {
             MarvelComicsTheme {
                 // A surface container using the 'background' color from the theme
@@ -132,13 +137,10 @@ fun CharactersScreen(viewModel: CharactersViewModel) {
 
 @Composable
 fun MarvelCharacterItem(character: SimpleMarvelCharacter, onItemClick: (Int) -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(4.dp)
-            .clickable { onItemClick(character.id) },
-        horizontalAlignment = Alignment.CenterHorizontally
+    Box (
+        modifier = Modifier.clickable { onItemClick(character.id) }
     ) {
+        // Image with fixed max width
         Image(
             painter = rememberImagePainter(
                 data = character.photo,
@@ -149,16 +151,23 @@ fun MarvelCharacterItem(character: SimpleMarvelCharacter, onItemClick: (Int) -> 
             ),
             contentDescription = null,
             modifier = Modifier
-                .size(120.dp)
-                .padding(4.dp),
+                .fillMaxWidth()
+                .height(200.dp) // Setting a fixed height for the image
+                .clip(shape = RoundedCornerShape(8.dp)), // Apply rounded corners if desired
             contentScale = ContentScale.Crop
         )
+        
+        // Text positioned at the bottom of the image
         Text(
             text = character.name,
-            color = Color.Black,
+            textAlign = TextAlign.Center,
+            color = Color.White,
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(top = 4.dp)
+            modifier = Modifier
+                .align(Alignment.TopCenter) // Positioning the text at the bottom
+                .padding(16.dp) // Adjust padding as needed
+                .background(color = Color.Black.copy(alpha = 0.5f)) // Semi-transparent background
         )
     }
 }
