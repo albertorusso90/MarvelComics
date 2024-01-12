@@ -1,8 +1,8 @@
 package com.albertorusso.marvelcomics.di
 
-import com.albertorusso.marvelcomics.data.remote.ApiService
-import com.albertorusso.marvelcomics.data.remote.repository.CharacterRepository
-import com.albertorusso.marvelcomics.data.remote.repository.CharacterRepositoryImpl
+import com.albertorusso.marvelcomics.network.ApiService
+import com.albertorusso.marvelcomics.domain.repositories.CharacterRepository
+import com.albertorusso.marvelcomics.data.remote.repositories.CharacterRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

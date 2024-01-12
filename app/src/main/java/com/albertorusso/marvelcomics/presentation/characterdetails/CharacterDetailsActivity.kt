@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.albertorusso.marvelcomics.R
-import com.albertorusso.marvelcomics.domain.model.ImageItem
+import com.albertorusso.marvelcomics.domain.models.ImageItem
 import com.albertorusso.marvelcomics.presentation.components.CharacterItem
 import com.albertorusso.marvelcomics.presentation.components.CircularIndeterminateProgressBar
 import com.albertorusso.marvelcomics.presentation.components.ErrorText

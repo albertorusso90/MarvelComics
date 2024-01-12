@@ -1,6 +1,6 @@
 package com.albertorusso.marvelcomics.di
 
-import com.albertorusso.marvelcomics.data.remote.repository.CharacterRepository
+import com.albertorusso.marvelcomics.domain.repositories.CharacterRepository
 import com.albertorusso.marvelcomics.domain.usecase.GetCharacterDetailsUseCase
 import com.albertorusso.marvelcomics.domain.usecase.GetCharactersUseCase
 import dagger.Module

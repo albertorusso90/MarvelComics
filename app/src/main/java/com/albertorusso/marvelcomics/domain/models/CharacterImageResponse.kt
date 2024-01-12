@@ -1,4 +1,4 @@
-package com.albertorusso.marvelcomics.data.remote.model
+package com.albertorusso.marvelcomics.domain.models
 
 data class CharacterImageResponse(
     val code: Int,

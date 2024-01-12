@@ -1,8 +1,8 @@
-package com.albertorusso.marvelcomics.data.remote.repository
+package com.albertorusso.marvelcomics.domain.repositories
 
-import com.albertorusso.marvelcomics.data.remote.model.Character
-import com.albertorusso.marvelcomics.data.remote.model.CharacterDetails
-import com.albertorusso.marvelcomics.data.remote.model.ImageData
+import com.albertorusso.marvelcomics.domain.models.Character
+import com.albertorusso.marvelcomics.domain.models.CharacterDetails
+import com.albertorusso.marvelcomics.domain.models.ImageData
 
 interface CharacterRepository {
     suspend fun getCharacters(name: String): List<Character>?

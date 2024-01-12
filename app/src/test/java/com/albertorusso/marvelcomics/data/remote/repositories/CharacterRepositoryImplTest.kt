@@ -1,7 +1,7 @@
-package com.albertorusso.marvelcomics.data.remote.repository
+package com.albertorusso.marvelcomics.data.remote.repositories
 
-import com.albertorusso.marvelcomics.data.remote.ApiService
-import com.albertorusso.marvelcomics.data.remote.model.Thumbnail
+import com.albertorusso.marvelcomics.network.ApiService
+import com.albertorusso.marvelcomics.domain.models.Thumbnail
 import kotlinx.coroutines.runBlocking
 import okhttp3.ResponseBody
 import org.junit.Assert.assertEquals
@@ -11,15 +11,15 @@ import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
 import retrofit2.Response
-import com.albertorusso.marvelcomics.data.remote.model.Character
-import com.albertorusso.marvelcomics.data.remote.model.CharacterData
-import com.albertorusso.marvelcomics.data.remote.model.CharacterDetails
-import com.albertorusso.marvelcomics.data.remote.model.CharacterDetailsData
-import com.albertorusso.marvelcomics.data.remote.model.CharacterDetailsResponse
-import com.albertorusso.marvelcomics.data.remote.model.CharacterImageResponse
-import com.albertorusso.marvelcomics.data.remote.model.CharacterImagesData
-import com.albertorusso.marvelcomics.data.remote.model.CharacterResponse
-import com.albertorusso.marvelcomics.data.remote.model.ImageData
+import com.albertorusso.marvelcomics.domain.models.Character
+import com.albertorusso.marvelcomics.domain.models.CharacterData
+import com.albertorusso.marvelcomics.domain.models.CharacterDetails
+import com.albertorusso.marvelcomics.domain.models.CharacterDetailsData
+import com.albertorusso.marvelcomics.domain.models.CharacterDetailsResponse
+import com.albertorusso.marvelcomics.domain.models.CharacterImageResponse
+import com.albertorusso.marvelcomics.domain.models.CharacterImagesData
+import com.albertorusso.marvelcomics.domain.models.CharacterResponse
+import com.albertorusso.marvelcomics.domain.models.ImageData
 import org.mockito.ArgumentMatchers.anyInt
 
 class CharacterRepositoryImplTest {

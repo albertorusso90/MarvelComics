@@ -4,8 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.albertorusso.marvelcomics.domain.model.SimpleMarvelCharacter
+import com.albertorusso.marvelcomics.presentation.models.SimpleMarvelCharacter
 import com.albertorusso.marvelcomics.domain.usecase.GetCharactersUseCase
+import com.albertorusso.marvelcomics.presentation.mappers.Mapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,7 +29,8 @@ class CharactersViewModel @Inject constructor(
                 
                 if(name.isNotEmpty()) {
                     val characterList = getCharactersUseCase(name)
-                    characters.postValue(characterList)
+                    val mappedItems = Mapper().map(characterList)
+                    characters.postValue(mappedItems)
                 }
     
                 loadingState.value = LoadingState.LOADED

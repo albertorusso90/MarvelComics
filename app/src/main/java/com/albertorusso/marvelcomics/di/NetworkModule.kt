@@ -1,7 +1,7 @@
 package com.albertorusso.marvelcomics.di
 
 import com.albertorusso.marvelcomics.BuildConfig
-import com.albertorusso.marvelcomics.data.remote.ApiService
+import com.albertorusso.marvelcomics.network.ApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,6 +17,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+    
     @Provides
     @Singleton
     fun provideApiService(): ApiService {

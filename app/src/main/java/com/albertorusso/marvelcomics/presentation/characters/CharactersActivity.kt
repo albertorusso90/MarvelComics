@@ -48,7 +48,7 @@ import coil.compose.rememberImagePainter
 import com.albertorusso.marvelcomics.presentation.components.CircularIndeterminateProgressBar
 import com.albertorusso.marvelcomics.presentation.components.ErrorText
 import com.albertorusso.marvelcomics.R
-import com.albertorusso.marvelcomics.domain.model.SimpleMarvelCharacter
+import com.albertorusso.marvelcomics.presentation.models.SimpleMarvelCharacter
 import com.albertorusso.marvelcomics.presentation.characterdetails.CharacterDetailsActivity
 
 @AndroidEntryPoint

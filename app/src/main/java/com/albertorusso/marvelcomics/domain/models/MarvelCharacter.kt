@@ -1,4 +1,4 @@
-package com.albertorusso.marvelcomics.domain.model
+package com.albertorusso.marvelcomics.domain.models
 
 data class MarvelCharacter(
     val id: Int,

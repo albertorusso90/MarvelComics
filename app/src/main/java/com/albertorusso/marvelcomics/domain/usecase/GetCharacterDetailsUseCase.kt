@@ -1,10 +1,10 @@
 package com.albertorusso.marvelcomics.domain.usecase
 
-import com.albertorusso.marvelcomics.data.remote.repository.CharacterRepository
-import com.albertorusso.marvelcomics.data.remote.model.CharacterDetails
-import com.albertorusso.marvelcomics.data.remote.model.ImageData
-import com.albertorusso.marvelcomics.domain.model.ImageItem
-import com.albertorusso.marvelcomics.domain.model.MarvelCharacter
+import com.albertorusso.marvelcomics.domain.repositories.CharacterRepository
+import com.albertorusso.marvelcomics.domain.models.CharacterDetails
+import com.albertorusso.marvelcomics.domain.models.ImageData
+import com.albertorusso.marvelcomics.domain.models.ImageItem
+import com.albertorusso.marvelcomics.domain.models.MarvelCharacter
 import javax.inject.Inject
 
 class GetCharacterDetailsUseCase @Inject constructor(private val characterRepository: CharacterRepository) {
@@ -39,6 +39,7 @@ class GetCharacterDetailsUseCase @Inject constructor(private val characterReposi
         return items.map { ImageItem(
             name = it.title,
             image = "${it.thumbnail.path}.${it.thumbnail.extension}"
-        )}
+        )
+        }
     }
 }

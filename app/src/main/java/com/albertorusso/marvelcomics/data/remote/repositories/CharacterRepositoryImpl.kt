@@ -1,9 +1,10 @@
-package com.albertorusso.marvelcomics.data.remote.repository
+package com.albertorusso.marvelcomics.data.remote.repositories
 
-import com.albertorusso.marvelcomics.data.remote.ApiService
-import com.albertorusso.marvelcomics.data.remote.model.Character
-import com.albertorusso.marvelcomics.data.remote.model.CharacterDetails
-import com.albertorusso.marvelcomics.data.remote.model.ImageData
+import com.albertorusso.marvelcomics.network.ApiService
+import com.albertorusso.marvelcomics.domain.models.Character
+import com.albertorusso.marvelcomics.domain.models.CharacterDetails
+import com.albertorusso.marvelcomics.domain.models.ImageData
+import com.albertorusso.marvelcomics.domain.repositories.CharacterRepository
 
 
 class CharacterRepositoryImpl(private val apiService: ApiService) : CharacterRepository {

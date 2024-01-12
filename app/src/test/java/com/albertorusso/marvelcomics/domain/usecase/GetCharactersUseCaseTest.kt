@@ -1,8 +1,8 @@
 package com.albertorusso.marvelcomics.domain.usecase
 
-import com.albertorusso.marvelcomics.data.remote.model.Thumbnail
-import com.albertorusso.marvelcomics.data.remote.repository.CharacterRepository
-import com.albertorusso.marvelcomics.data.remote.model.Character
+import com.albertorusso.marvelcomics.domain.models.Thumbnail
+import com.albertorusso.marvelcomics.domain.repositories.CharacterRepository
+import com.albertorusso.marvelcomics.domain.models.Character
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.albertorusso.marvelcomics.domain.model.MarvelCharacter
+import com.albertorusso.marvelcomics.domain.models.MarvelCharacter
 import com.albertorusso.marvelcomics.domain.usecase.GetCharacterDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

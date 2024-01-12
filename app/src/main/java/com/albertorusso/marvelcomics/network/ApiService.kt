@@ -1,8 +1,8 @@
-package com.albertorusso.marvelcomics.data.remote
+package com.albertorusso.marvelcomics.network
 
-import com.albertorusso.marvelcomics.data.remote.model.CharacterDetailsResponse
-import com.albertorusso.marvelcomics.data.remote.model.CharacterImageResponse
-import com.albertorusso.marvelcomics.data.remote.model.CharacterResponse
+import com.albertorusso.marvelcomics.domain.models.CharacterDetailsResponse
+import com.albertorusso.marvelcomics.domain.models.CharacterImageResponse
+import com.albertorusso.marvelcomics.domain.models.CharacterResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -23,5 +23,4 @@ interface ApiService {
     
     @GET("/v1/public/characters/{characterId}/events")
     suspend fun getCharacterEvents(@Path("characterId") characterId: Int): Response<CharacterImageResponse>
-    
 }
