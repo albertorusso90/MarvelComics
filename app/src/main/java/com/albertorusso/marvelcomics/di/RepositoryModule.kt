@@ -1,5 +1,6 @@
 package com.albertorusso.marvelcomics.di
 
+import com.albertorusso.marvelcomics.data.remote.datasources.remote.RemoteDataSource
 import com.albertorusso.marvelcomics.network.ApiService
 import com.albertorusso.marvelcomics.domain.repositories.CharacterRepository
 import com.albertorusso.marvelcomics.data.remote.repositories.CharacterRepositoryImpl
@@ -14,7 +15,7 @@ import javax.inject.Singleton
 object RepositoryModule {
     @Provides
     @Singleton
-    fun provideCharacterRepository(apiService: ApiService): CharacterRepository {
-        return CharacterRepositoryImpl(apiService)
+    fun provideCharacterRepository(remoteDataSource: RemoteDataSource): CharacterRepository {
+        return CharacterRepositoryImpl(remoteDataSource)
     }
 }

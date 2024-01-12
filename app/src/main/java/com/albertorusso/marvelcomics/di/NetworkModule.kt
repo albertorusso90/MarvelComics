@@ -1,6 +1,8 @@
 package com.albertorusso.marvelcomics.di
 
 import com.albertorusso.marvelcomics.BuildConfig
+import com.albertorusso.marvelcomics.data.remote.datasources.remote.RemoteDataSource
+import com.albertorusso.marvelcomics.data.remote.datasources.remote.RemoteDataSourceImpl
 import com.albertorusso.marvelcomics.network.ApiService
 import dagger.Module
 import dagger.Provides
@@ -50,5 +52,11 @@ object NetworkModule {
             
             return chain.proceed(newRequest)
         }
+    }
+    
+    @Provides
+    @Singleton
+    fun provideRemoteDataSource(apiService: ApiService): RemoteDataSource {
+        return RemoteDataSourceImpl(apiService)
     }
 }

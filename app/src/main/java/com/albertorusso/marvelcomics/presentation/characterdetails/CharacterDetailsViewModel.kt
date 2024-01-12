@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.albertorusso.marvelcomics.domain.models.Result
 import com.albertorusso.marvelcomics.domain.models.MarvelCharacter
 import com.albertorusso.marvelcomics.domain.usecase.GetCharacterDetailsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,13 +28,16 @@ class CharacterDetailsViewModel @Inject constructor(
                 loadingState.value = LoadingState.IN_PROGRESS
                 
                 if(id > 0) {
-                    val characterDetails = getCharacterDetailsUseCase(id)
-                    characterDetails?.let {
-                        character.postValue(it)
-                        loadingState.value = LoadingState.LOADED
-                    } ?: run {
-                        loadingState.value = LoadingState.ERROR
-                        return@launch  // Exit the function if characterDetails is null
+                    when (val characterResult = getCharacterDetailsUseCase(id)) {
+                        is Result.Success -> {
+                            val characterDetails = characterResult.data
+                            character.postValue(characterDetails)
+                            loadingState.value = LoadingState.LOADED
+                        }
+                        is Result.Error -> {
+                            // Handle error state
+                            loadingState.value = LoadingState.ERROR
+                        }
                     }
                 }
             } catch (e: Exception) {

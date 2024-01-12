@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.albertorusso.marvelcomics.domain.models.Result
 import com.albertorusso.marvelcomics.presentation.models.SimpleMarvelCharacter
 import com.albertorusso.marvelcomics.domain.usecase.GetCharactersUseCase
 import com.albertorusso.marvelcomics.presentation.mappers.Mapper
@@ -24,13 +25,21 @@ class CharactersViewModel @Inject constructor(
     
     fun fetchCharacters(name: String) {
         viewModelScope.launch {
+            
             try {
                 loadingState.value = LoadingState.IN_PROGRESS
                 
                 if(name.isNotEmpty()) {
-                    val characterList = getCharactersUseCase(name)
-                    val mappedItems = Mapper().map(characterList)
-                    characters.postValue(mappedItems)
+                    when (val result = getCharactersUseCase(name)) {
+                        is Result.Success -> {
+                            characters.postValue(Mapper().map(result.data))
+                        }
+                        is Result.Error -> {
+                            // display error message
+                            // result.message
+                            loadingState.value = LoadingState.ERROR
+                        }
+                    }
                 }
     
                 loadingState.value = LoadingState.LOADED
