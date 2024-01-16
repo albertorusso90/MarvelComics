@@ -16,36 +16,34 @@ class CharacterDetailsViewModel @Inject constructor(
     private val getCharacterDetailsUseCase: GetCharacterDetailsUseCase
 ) : ViewModel() {
     
-    private val loadingState: MutableLiveData<LoadingState> = MutableLiveData()
-    private val character = MutableLiveData<MarvelCharacter>()
+    private val viewState: MutableLiveData<ViewState> = MutableLiveData()
     
-    fun state(): LiveData<LoadingState> = loadingState
-    fun character(): LiveData<MarvelCharacter> = character
+    fun viewState(): LiveData<ViewState> = viewState
     
     fun fetchCharacter(id: Int) {
         viewModelScope.launch {
             try {
-                loadingState.value = LoadingState.IN_PROGRESS
+                viewState.value = ViewState.Loading
                 
                 if(id > 0) {
                     when (val characterResult = getCharacterDetailsUseCase(id)) {
                         is Result.Success -> {
-                            val characterDetails = characterResult.data
-                            character.postValue(characterDetails)
-                            loadingState.value = LoadingState.LOADED
+                            viewState.value = ViewState.Loaded(characterResult.data)
                         }
                         is Result.Error -> {
-                            // Handle error state
-                            loadingState.value = LoadingState.ERROR
+                            viewState.value = ViewState.Error(characterResult.message)
                         }
                     }
                 }
             } catch (e: Exception) {
-                loadingState.value = LoadingState.ERROR
+                viewState.value = ViewState.Error(e.message)
             }
         }
     }
-    enum class LoadingState {
-        IN_PROGRESS, LOADED, ERROR
+    
+    sealed class ViewState {
+        object Loading : ViewState()
+        data class Loaded(val character: MarvelCharacter) : ViewState()
+        data class Error(val errorMessage: String?) : ViewState()
     }
 }

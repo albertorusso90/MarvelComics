@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.albertorusso.marvelcomics.R
 import com.albertorusso.marvelcomics.domain.models.ImageItem
+import com.albertorusso.marvelcomics.presentation.characterdetails.CharacterDetailsViewModel.ViewState
 import com.albertorusso.marvelcomics.presentation.components.CharacterItem
 import com.albertorusso.marvelcomics.presentation.components.CircularIndeterminateProgressBar
 import com.albertorusso.marvelcomics.presentation.components.ErrorText
@@ -72,10 +73,7 @@ class CharacterDetailsActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CharacterDetailScreen(viewModel: CharacterDetailsViewModel) {
-    val textToShow = stringResource(id = R.string.error_loading)
-    
-    val loadingState by viewModel.state().observeAsState()
-    val character by viewModel.character().observeAsState()
+    val viewState by viewModel.viewState().observeAsState(initial = ViewState.Loading)
     
     // Display search bar and list of items
     Column(
@@ -84,10 +82,17 @@ fun CharacterDetailScreen(viewModel: CharacterDetailsViewModel) {
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            if(loadingState == CharacterDetailsViewModel.LoadingState.LOADED) {
-        
-                
-                character?.let {
+            when (viewState) {
+                is ViewState.Loading -> {
+                    CircularIndeterminateProgressBar(isDisplayed = true)
+                }
+                is ViewState.Error -> {
+                    val errorViewState = viewState as ViewState.Error
+                    ErrorText(isDisplayed = true, textToShow  = errorViewState.errorMessage ?: stringResource(id = R.string.error_loading))
+                }
+                is ViewState.Loaded -> {
+                    val character = (viewState as ViewState.Loaded).character
+                    
                     Column (
                         modifier = Modifier
                             .fillMaxWidth()
@@ -98,7 +103,7 @@ fun CharacterDetailScreen(viewModel: CharacterDetailsViewModel) {
                             // Image with fixed max width
                             Image(
                                 painter = rememberImagePainter(
-                                    data = it.image,
+                                    data = character.image,
                                     builder = {
                                         error(R.drawable.error_placeholder) // Replace with your error placeholder drawable
                                         placeholder(R.drawable.placeholder) // Replace with your placeholder drawable
@@ -111,10 +116,10 @@ fun CharacterDetailScreen(viewModel: CharacterDetailsViewModel) {
                                     .clip(shape = RoundedCornerShape(8.dp)), // Apply rounded corners if desired
                                 contentScale = ContentScale.Crop
                             )
-        
+            
                             // Text positioned at the bottom of the image
                             Text(
-                                text = it.name,
+                                text = character.name,
                                 color = Color.White,
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
@@ -124,16 +129,13 @@ fun CharacterDetailScreen(viewModel: CharacterDetailsViewModel) {
                                     .background(color = Color.Black.copy(alpha = 0.5f)) // Semi-transparent background
                             )
                         }
-                        
-                        HorizontalList(stringResource(id = R.string.comics), items = it.comics)
-                        HorizontalList(stringResource(id = R.string.events), items = it.events)
-                        HorizontalList(stringResource(id = R.string.series), items = it.series)
+        
+                        HorizontalList(stringResource(id = R.string.comics), items = character.comics)
+                        HorizontalList(stringResource(id = R.string.events), items = character.events)
+                        HorizontalList(stringResource(id = R.string.series), items = character.series)
                     }
                 }
             }
-            
-            ErrorText(isDisplayed = loadingState == CharacterDetailsViewModel.LoadingState.ERROR, textToShow = textToShow)
-            CircularIndeterminateProgressBar(isDisplayed = loadingState == CharacterDetailsViewModel.LoadingState.IN_PROGRESS)
         }
     }
 }
