@@ -17,39 +17,37 @@ class CharactersViewModel @Inject constructor(
     private val getCharactersUseCase: GetCharactersUseCase
 ) : ViewModel() {
     
-    private val loadingState: MutableLiveData<LoadingState> = MutableLiveData()
+    private val viewState: MutableLiveData<ViewState> = MutableLiveData()
     private val characters = MutableLiveData<List<SimpleMarvelCharacter>>()
     
-    fun state(): LiveData<LoadingState> = loadingState
+    fun viewState(): LiveData<ViewState> = viewState
     fun characters(): LiveData<List<SimpleMarvelCharacter>> = characters
     
     fun fetchCharacters(name: String) {
         viewModelScope.launch {
             
             try {
-                loadingState.value = LoadingState.IN_PROGRESS
-                
                 if(name.isNotEmpty()) {
+                    viewState.value = ViewState.Loading
                     when (val result = getCharactersUseCase(name)) {
                         is Result.Success -> {
-                            characters.postValue(Mapper().map(result.data))
+                            viewState.value = ViewState.Loaded(Mapper().map(result.data))
                         }
                         is Result.Error -> {
-                            // display error message
-                            // result.message
-                            loadingState.value = LoadingState.ERROR
+                            viewState.value = ViewState.Error(result.message)
                         }
                     }
                 }
-    
-                loadingState.value = LoadingState.LOADED
             } catch (e: Exception) {
-                loadingState.value = LoadingState.ERROR
+                viewState.value = ViewState.Error(e.message)
             }
         }
     }
     
-    enum class LoadingState {
-        IN_PROGRESS, LOADED, ERROR
+    sealed class ViewState {
+        object Loading : ViewState()
+        data class Loaded(val characters: List<SimpleMarvelCharacter>) : ViewState()
+        data class Error(val errorMessage: String?) : ViewState()
     }
+    
 }

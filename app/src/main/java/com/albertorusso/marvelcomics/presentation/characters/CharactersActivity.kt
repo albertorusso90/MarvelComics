@@ -2,7 +2,6 @@ package com.albertorusso.marvelcomics.presentation.characters
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -33,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
@@ -48,8 +48,11 @@ import coil.compose.rememberImagePainter
 import com.albertorusso.marvelcomics.presentation.components.CircularIndeterminateProgressBar
 import com.albertorusso.marvelcomics.presentation.components.ErrorText
 import com.albertorusso.marvelcomics.R
-import com.albertorusso.marvelcomics.presentation.models.SimpleMarvelCharacter
 import com.albertorusso.marvelcomics.presentation.characterdetails.CharacterDetailsActivity
+import com.albertorusso.marvelcomics.presentation.models.SimpleMarvelCharacter
+import com.albertorusso.marvelcomics.presentation.characters.CharactersViewModel.ViewState
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CharactersActivity : ComponentActivity() {
@@ -74,24 +77,21 @@ class CharactersActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CharactersScreen(viewModel: CharactersViewModel) {
-    val textToShow = stringResource(id = R.string.error_loading)
-    
-    val loadingState by viewModel.state().observeAsState()
-    val characters by viewModel.characters().observeAsState(initial = emptyList())
+    val viewState by viewModel.viewState().observeAsState(initial = ViewState.Loading)
     var searchText by remember { mutableStateOf("") }
     
     // Access the Composable's Context
     val context = LocalContext.current
     
     // Handler for delaying text input handling
-    val handler = remember { Handler(context.mainLooper) }
+    val handler = rememberCoroutineScope()
     
     // Function to fetch characters after a delay
     fun fetchCharactersWithDelay(newText: String) {
-        handler.removeCallbacksAndMessages(null) // Remove existing callbacks
-        handler.postDelayed({
+        handler.launch {
+            delay(300) // Delay time (e.g., 300 milliseconds)
             viewModel.fetchCharacters(newText)
-        }, 300) // Set the delay time (e.g., 300 milliseconds)
+        }
     }
     
     // Display search bar and list of items
@@ -114,23 +114,30 @@ fun CharactersScreen(viewModel: CharactersViewModel) {
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
-            if(loadingState == CharactersViewModel.LoadingState.LOADED) {
-                LazyVerticalGrid(
-                    GridCells.Fixed(2), // 2 items per row
-                    contentPadding = PaddingValues(8.dp)
-                ) {
-                    items(characters) { character ->
-                        MarvelCharacterItem(character = character) { characterId ->
-                            val intent = Intent(context, CharacterDetailsActivity::class.java)
-                            intent.putExtra(CharacterDetailsActivity.CHARACTER_ID_EXTRA, characterId)
-                            context.startActivity(intent)
+            when (viewState) {
+                is ViewState.Loading -> {
+                    CircularIndeterminateProgressBar(isDisplayed = true)
+                }
+                is ViewState.Error -> {
+                    val errorViewState = viewState as ViewState.Error
+                    ErrorText(isDisplayed = true, textToShow  = errorViewState.errorMessage ?: stringResource(id = R.string.error_loading))
+                }
+                is ViewState.Loaded -> {
+                    val loadedViewState = viewState as ViewState.Loaded
+                    LazyVerticalGrid(
+                        GridCells.Fixed(2), // 2 items per row
+                        contentPadding = PaddingValues(8.dp)
+                    ) {
+                        items(loadedViewState.characters) { character ->
+                            MarvelCharacterItem(character = character) { characterId ->
+                                val intent = Intent(context, CharacterDetailsActivity::class.java)
+                                intent.putExtra(CharacterDetailsActivity.CHARACTER_ID_EXTRA, characterId)
+                                context.startActivity(intent)
+                            }
                         }
                     }
                 }
             }
-    
-            ErrorText(isDisplayed = loadingState == CharactersViewModel.LoadingState.ERROR, textToShow = textToShow)
-            CircularIndeterminateProgressBar(isDisplayed = loadingState == CharactersViewModel.LoadingState.IN_PROGRESS)
         }
     }
 }
